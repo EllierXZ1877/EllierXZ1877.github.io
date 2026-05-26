@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artículo | CEAD</title>
+    <link rel="icon" sizes="192x192" href="files/logounaca.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0d3b66;
+            --primary-dark: #0b223a;
+            --accent: #dfb24b;
+            --bg: #ffffff;
+            --text: #2d3748;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: var(--text);
+            line-height: 1.8;
+        }
+
+        .navbar {
+            background-color: var(--primary-dark);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .navbar .back-link:hover { color: var(--accent); }
+
+        .article-container {
+            max-width: 800px;
+            margin: 3rem auto;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .meta-type {
+            display: inline-block;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        h1 {
+            color: var(--primary-dark);
+            font-size: 2.5rem;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+
+        .meta-date {
+            color: #718096;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .main-image {
+            width: 100%;
+            max-height: 450px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 2.5rem;
+        }
+
+        .article-body {
+            font-size: 1.1rem;
+            color: #4a5568;
+            white-space: pre-line;
+            margin-bottom: 3rem;
+        }
+
+        /* --- SECCIONES MULTIMEDIA LOCALES --- */
+        .section-title {
+            color: var(--primary-dark);
+            font-size: 1.5rem;
+            margin: 2.5rem 0 1rem 0;
+            border-bottom: 2px solid #edf2f7;
+            padding-bottom: 0.5rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 2.5rem;
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 6px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .gallery-img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .videos-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 1rem;
+        }
+
+        .local-video {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            background-color: #000;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--primary-dark);
+            color: #a0b2c6;
+            margin-top: 5rem;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 640px) {
+            .article-container { padding: 1.5rem; margin: 1.5rem 10px; }
+            h1 { font-size: 1.8rem; }
+            .videos-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html"><img src="files/logounaca.png" alt="Logo" style="height: 40px;"></a>
+        <a href="eventos-noticias.html" class="back-link"><i class="fas fa-chevron-left"></i> Volver a Novedades</a>
+    </nav>
+
+    <main class="article-container">
+        <span id="art-type" class="meta-type">Cargando...</span>
+        <h1 id="art-title">Título del Artículo</h1>
+        <div class="meta-date">
+            <i class="far fa-calendar-alt"></i> <span id="art-date">Fecha</span>
+        </div>
+        
+        <img id="art-img" src="" alt="Imagen del artículo" class="main-image">
+        
+        <div id="art-body" class="article-body">
+            Cargando contenido...
+        </div>
+
+        <div id="gallery-section" style="display: none;">
+            <h2 class="section-title"><i class="fas fa-images"></i> Galería de Fotos</h2>
+            <div id="gallery-grid" class="gallery-grid"></div>
+        </div>
+
+        <div id="videos-section" style="display: none;">
+            <h2 class="section-title"><i class="fas fa-video"></i> Videos Relacionados</h2>
+            <div id="videos-container" class="videos-container"></div>
+        </div>
+    </main>
+
+    <footer>
+        © 2026 Centro Educativo Adventista (CEAD)
+    </footer>
+
+    <script>
+        // Base de datos completa con ejemplos estructurados para TODO el contenido (e1-e5, n1-n10)
+        const baseDeDatos = {
+            // ==========================================
+            // EVENTOS (e1 al e5)
+            // ==========================================
+            'e1': { 
+                type: 'Evento Institucional', 
+                title: 'Feria Científica Institucional 2026', 
+                date: '28 de Mayo, 2026', 
+                img: 'files/noticia1.webp', 
+                body: 'Nos complace invitar a toda la comunidad educativa a nuestra Feria Científica 2026. Los estudiantes han pasado semanas investigando soluciones tecnológicas sustentables, robótica aplicada y procesos químicos.\n\nEl evento se llevará a cabo en las canchas principales del colegio desde las 8:30 AM. Contaremos con jurados externos y premios a las ideas más creativas y viables.',
+                gallery: ['files/feria_foto1.webp', 'files/feria_foto2.webp', 'files/feria_foto3.webp'], 
+                videos: ['files/feria_video1.mp4', 'files/feria_video2.mp4'] 
+            },
+            'e2': { 
+                type: 'Evento Espiritual', 
+                title: 'Campamento Espiritual "Redimidos"', 
+                date: '05 de Junio, 2026', 
+                img: 'files/noticia2.webp', 
+                body: 'Preparándonos para nuestro retiro anual. Este año nos trasladaremos a un centro campestre diseñado para despejar la mente y fortalecer los lazos espirituales con nuestro Creador.\n\nIncluye talleres dinámicos, caminatas al aire libre, fogatas y momentos musicales liderados por el departamento de capellanía.',
+                gallery: ['files/campamento_foto1.webp', 'files/campamento_foto2.webp', 'files/campamento_foto3.webp'],
+                videos: ['files/campamento_video1.mp4', 'files/campamento_video2.mp4']
+            },
+            'e3': { 
+                type: 'Evento Deportivo', 
+                title: 'Día Familiar de Deportes', 
+                date: '12 de Junio, 2026', 
+                img: 'files/inicial.webp', 
+                body: '¡Es hora de moverse! El CEAD celebra su jornada de integración familiar a través del deporte. Tendremos competiciones amistosas para padres, relevos para niños de nivel inicial y un cuadrangular de baloncesto de secundaria.\n\nNo olvides traer ropa cómoda y agua para disfrutar un día lleno de salud.',
+                gallery: ['files/deportes_foto1.webp', 'files/deportes_foto2.webp', 'files/deportes_foto3.webp'],
+                videos: ['files/deportes_video1.mp4', 'files/deportes_video2.mp4']
+            },
+            'e4': { 
+                type: 'Evento Cultural', 
+                title: 'Recital de Música y Marching Band', 
+                date: '22 de Junio, 2026', 
+                img: 'files/primaria.webp', 
+                body: 'Nuestra aclamada Marching Band compartirá escenario con las clases de arte y coro en una gala cultural única. Se interpretarán piezas patrias, himnos solemnes y obras clásicas adaptadas.\n\nLa entrada es libre y se abrirá el auditorio a las 6:00 PM.',
+                gallery: ['files/marching_foto1.webp', 'files/marching_foto2.webp', 'files/marching_foto3.webp'],
+                videos: ['files/marching_video1.mp4', 'files/marching_video2.mp4']
+            },
+            'e5': { 
+                type: 'Evento de Graduación', 
+                title: 'Ceremonia de Graduación de Secundaria', 
+                date: '30 de Junio, 2026', 
+                img: 'files/secundaria.webp', 
+                body: 'El acto más solemne del año. Despedimos a una excelente generación de estudiantes que culminan su etapa de bachillerato.\n\nLa ceremonia tomará lugar en el salón de actos principal, contando con discursos honoríficos, entrega de diplomas y un espacio especial de consagración espiritual para sus nuevas etapas universitarias.',
+                gallery: ['files/graduacion_foto1.webp', 'files/graduacion_foto2.webp', 'files/graduacion_foto3.webp'],
+                videos: ['files/graduacion_video1.mp4', 'files/graduacion_video2.mp4']
+            },
+            
+            // ==========================================
+            // NOTICIAS (n1 al n10)
+            // ==========================================
+            'n1': { 
+                type: 'Novedades Técnicas', 
+                title: 'Feria Científica Y Matematica 2026', 
+                date: '14 de Mayo, 2026', 
+                img: 'Files/Feria/2.jpg', 
+                body: 'Estudiantes participaron en una exposición educativa donde presentaron proyectos creativos, demostrando su talento, esfuerzo y trabajo en equipo.\n\nCon gran entusiasmo y creatividad, estudiantes de 1ro, 2do, 3ro, 4to, 5to y 6to de secundaria participaron en una destacada exposición educativa donde presentaron diferentes proyectos y maquetas relacionadas con temas académicos, científicos y tecnológicos. La actividad reunió a docentes, estudiantes y visitantes, quienes recorrieron cada stand apreciando el esfuerzo, la dedicación y el talento demostrado por los jóvenes en cada una de sus presentaciones. Durante la jornada, los participantes demostraron sus conocimientos y habilidades a través de trabajos elaborados con creatividad, trabajo en equipo e innovación. La exposición tuvo como objetivo fortalecer el aprendizaje práctico y motivar a los estudiantes a desarrollar nuevas ideas y capacidades dentro del ambiente escolar, convirtiéndose en una experiencia enriquecedora para toda la comunidad educativa..',
+                gallery: ['files/Feria/1.jpg', 'files/Feria/2.jpg', 'files/Feria/3.jpg', 'files/Feria/4.jpg', 'files/Feria/5.jpg', 'files/Feria/6.jpg'],
+                videos: ['files/Feria/12.mp4', 'files/lab_video2.mp4']
+            },
+            'n2': { 
+                type: 'Logro Académico', 
+                title: 'CEAD Obtiene Primer Lugar en Olimpíadas de Matemática', 
+                date: '18 de Mayo, 2026', 
+                img: 'files/noticia4.webp', 
+                body: '¡Orgullo institucional! Queremos felicitar formalmente a nuestros representantes por su impecable desempeño en el certamen regional de matemáticas.\n\nTras superar tres rigurosas rondas de álgebra y geometría avanzada, nuestro equipo alzó el trofeo de primer lugar.',
+                gallery: ['files/mate_foto1.webp', 'files/mate_foto2.webp', 'files/mate_foto3.webp'],
+                videos: ['files/mate_video1.mp4', 'files/mate_video2.mp4']
+            },
+            'n3': { 
+                type: 'Capacitación', 
+                title: 'Taller de Capacitación Docente en Nuevas Tecnologías', 
+                date: '15 de Mayo, 2026', 
+                img: 'files/profe.webp', 
+                body: 'Durante el receso académico de esta semana, nuestros docentes formaron parte de un intensivo taller metodológico.\n\nEl enfoque principal estuvo orientado a la gestión de plataformas interactivas modernas para optimizar la enseñanza, asegurando que las clases sigan siendo interactivas y dinámicas.',
+                gallery: ['files/profe_foto1.webp', 'files/profe_foto2.webp', 'files/profe_foto3.webp'],
+                videos: ['files/profe_video1.mp4', 'files/profe_video2.mp4']
+            },
+            'n4': { 
+                type: 'Servicios', 
+                title: 'Lanzamiento oficial de la Nueva Biblioteca Virtual', 
+                date: '10 de Mayo, 2026', 
+                img: 'files/secundaria.webp', 
+                body: 'Nos alegra informar que nuestro ecosistema web sigue creciendo. A partir de hoy, la sección de Biblioteca Virtual se encuentra completamente habilitada.\n\nTanto alumnos como profesores podrán hacer uso de este catálogo digital para descargar lecturas obligatorias, guías de estudio y material de soporte bibliográfico complementario de manera gratuita.',
+                gallery: ['files/biblioteca_foto1.webp', 'files/biblioteca_foto2.webp', 'files/biblioteca_foto3.webp'],
+                videos: ['files/biblioteca_video1.mp4', 'files/biblioteca_video2.mp4']
+            },
+            'n5': { 
+                type: 'Proyectos', 
+                title: 'Proyecto de Huertos Escolares en Nivel Inicial', 
+                date: '05 de Mayo, 2026', 
+                img: 'files/inicial.webp', 
+                body: 'Fomentando la responsabilidad y el cuidado de la creación, los alumnos del nivel inicial iniciaron su propio huerto.\n\nGuiados por sus maestras, sembraron hortalizas pequeñas y plantas aromáticas, aprendiendo sobre biología elemental y la importancia de una alimentación saludable.',
+                gallery: ['files/huerto_foto1.webp', 'files/huerto_foto2.webp', 'files/huerto_foto3.webp'],
+                videos: ['files/huerto_video1.mp4', 'files/huerto_video2.mp4']
+            },
+            'n6': { 
+                type: 'Salud Escolar', 
+                title: 'Campaña de Salud Bucal de Regreso a Clases', 
+                date: '01 de Mayo, 2026', 
+                img: 'files/primaria.webp', 
+                body: 'Contamos con la grata visita de un equipo de odontólogos voluntarios que impartieron charlas didácticas sobre la higiene dental.\n\nSe entregaron kits de cepillado a los niños de primaria baja y se realizaron evaluaciones preventivas rutinarias.',
+                gallery: ['files/salud_foto1.webp', 'files/salud_foto2.webp', 'files/salud_foto3.webp'],
+                videos: ['files/salud_video1.mp4', 'files/salud_video2.mp4']
+            },
+            'n7': { 
+                type: 'Donaciones', 
+                title: 'Donación Especial de Instrumentos a la Marching Band', 
+                date: '25 de Abril, 2026', 
+                img: 'files/noticia1.webp', 
+                body: 'Extendemos un profundo agradecimiento a la asociación de padres y egresados por su reciente donación de instrumentos de percusión y viento metal.\n\nEste valioso aporte permitirá que más estudiantes se unan a las filas musicales del colegio de cara a los desfiles del próximo periodo escolar.',
+                gallery: ['files/donacion_foto1.webp', 'files/donacion_foto2.webp', 'files/donacion_foto3.webp'],
+                videos: ['files/donacion_video1.mp4', 'files/donacion_video2.mp4']
+            },
+            'n8': { 
+                type: 'Orientación', 
+                title: 'Charla de Orientación Vocacional para Alumnos de Término', 
+                date: '20 de Abril, 2026', 
+                img: 'files/noticia2.webp', 
+                body: 'El departamento de psicología organizó un foro de orientación profesional.\n\nRepresentantes de destacadas universidades compartieron información sobre procesos de admisión, orientación de aptitudes vocacionales y los diversos programas de asistencia financiera disponibles para nuestros futuros graduandos.',
+                gallery: ['files/orientacion_foto1.webp', 'files/orientacion_foto2.webp', 'files/orientacion_foto3.webp'],
+                videos: ['files/orientacion_video1.mp4', 'files/orientacion_video2.mp4']
+            },
+            'n9': { 
+                type: 'Reconocimiento', 
+                title: 'Reconocimiento al Mérito Estudiantil del Primer Periodo', 
+                date: '15 de Abril, 2026', 
+                img: 'files/noticia3.webp', 
+                body: 'Celebramos la excelencia académica. En nuestro matutino especial, hicimos entrega de diplomas de honor a aquellos estudiantes que mantuvieron índices sobresalientes durante el primer tramo del año.\n\nInstamos a toda la comunidad a continuar esforzándose con dedicación.',
+                gallery: ['files/merito_foto1.webp', 'files/merito_foto2.webp', 'files/merito_foto3.webp'],
+                videos: ['files/merito_video1.mp4', 'files/merito_video2.mp4']
+            },
+            'n10': { 
+                type: 'Seguridad', 
+                title: 'Simulacro de Evacuación Exitoso', 
+                date: '10 de Abril, 2026', 
+                img: 'files/noticia4.webp', 
+                body: 'La seguridad de nuestra gran familia es prioridad. Cumpliendo los protocolos de gestión de riesgos, se realizó un simulacro preventivo de evacuación.\n\nEl cuerpo estudiantil y administrativo evacuó las aulas hacia las zonas seguras en un tiempo récord de 2 minutos y 15 segundos, demostrando excelente orden.',
+                gallery: ['files/seguridad_foto1.webp', 'files/seguridad_foto2.webp', 'files/seguridad_foto3.webp'],
+                videos: ['files/seguridad_video1.mp4', 'files/seguridad_video2.mp4']
+            }
+        };
+
+        // Leer parámetro ID de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const artId = urlParams.get('id');
+
+        // Renderizar datos en los elementos HTML
+        if (artId && baseDeDatos[artId]) {
+            const articulo = baseDeDatos[artId];
+            document.getElementById('art-type').innerText = articulo.type;
+            document.getElementById('art-title').innerText = articulo.title;
+            document.getElementById('art-date').innerText = articulo.date;
+            document.getElementById('art-img').src = articulo.img;
+            document.getElementById('art-body').innerText = articulo.body;
+            document.title = `${articulo.title} | CEAD`;
+
+            // --- MOSTRAR GALERÍA LOCAL ---
+            if (articulo.gallery && articulo.gallery.length > 0) {
+                const gallerySection = document.getElementById('gallery-section');
+                const galleryGrid = document.getElementById('gallery-grid');
+                
+                articulo.gallery.forEach(imgUrl => {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = imgUrl;
+                    imgElement.alt = "Foto de la galería";
+                    imgElement.className = "gallery-img";
+                    galleryGrid.appendChild(imgElement);
+                });
+                gallerySection.style.display = 'block';
+            }
+
+            // --- MOSTRAR VIDEOS LOCALES (Máximo 2) ---
+            if (articulo.videos && articulo.videos.length > 0) {
+                const videosSection = document.getElementById('videos-section');
+                const videosContainer = document.getElementById('videos-container');
+                
+                // Limitamos a un máximo de 2 elementos por artículo de forma segura
+                articulo.videos.slice(0, 2).forEach(videoUrl => {
+                    const videoElement = document.createElement('video');
+                    videoElement.src = videoUrl;
+                    videoElement.controls = true;
+                    videoElement.className = "local-video";
+                    
+                    videosContainer.appendChild(videoElement);
+                });
+                videosSection.style.display = 'block';
+            }
+
+        } else {
+            document.getElementById('art-title').innerText = "Artículo no encontrado";
+            document.getElementById('art-body').innerText = "El recurso solicitado no existe o fue movido.";
+        }
+    </script>
+</body>
+</html>

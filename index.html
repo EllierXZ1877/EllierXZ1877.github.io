@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Centro Educativo Adventista (CEAD) | Santiago de los Caballeros</title>
+    
+    <link rel="icon" sizes="192x192" href="files/logounaca.png" type="image/png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- Variables de Diseño Global --- */
+        :root {
+            --primary-color: #0d3b66;
+            --secondary-color: #f4d35e;
+            --text-dark: #333333;
+            --text-light: #ffffff;
+            --bg-light: #f8f9fa;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --accent-gold: #dfb24b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+        }
+
+        /* --- ENCABEZADO INSTITUCIONAL --- */
+        .main-header {
+            background-color: #f0f4f8; 
+            padding: 1rem 0 0 0;
+            position: relative;
+        }
+
+        .top-social-bar {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: flex-end;
+            padding: 0 2rem;
+            gap: 15px;
+        }
+
+        .top-social-bar a {
+            color: #666666;
+            font-size: 1.4rem; 
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .top-social-bar a:hover {
+            color: #0f3661; 
+        }
+
+        .header-branding {
+            text-align: center;
+            padding: 1rem 2rem 2.5rem 2rem;
+        }
+
+        .header-branding .main-logo {
+            max-width: 140px; 
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        .header-branding h1 {
+            color: #0f3661;
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.3rem;
+        }
+
+        .header-branding p {
+            color: #555555;
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .main-nav {
+            background-color: #0b223a; 
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav-container ul {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            justify-content: center;
+            gap: 40px; 
+        }
+
+        .nav-container li a {
+            display: block;
+            color: #999999; 
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 1.2rem 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-container li a:hover {
+            color: #ffffff; 
+        }
+
+        .nav-container li a.highlight {
+            color: #999999; 
+        }
+
+        .nav-container li a.highlight:hover {
+            color: #ffffff;
+        }
+
+        /* --- NUEVA ESTRUCTURA DEL BANNER CON FECHAS --- */
+        .hero-banner-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 2rem auto 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            gap: 35px; /* Incrementado para dar más separación */
+            align-items: stretch;
+        }
+
+        .banner-slider {
+            flex: 2.5;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+            background-color: transparent; /* Removido fondo gris para que no se note en el contain */
+            aspect-ratio: 2048 / 834; /* Mantiene la proporción exacta de tus banners */
+            min-height: 250px;
+        }
+
+        .slide-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Cambiado a contain para ver el banner completo */
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .slide-img.active {
+            opacity: 1;
+            position: relative;
+        }
+
+        .banner-dates-sidebar {
+            flex: 1;
+            background-color: #0b223a;
+            color: #ffffff;
+            padding: 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+            margin-left: 15px; /* Empuja el cuadrado más hacia la derecha */
+        }
+
+        .date-widget {
+            display: none;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .date-widget.active {
+            display: block;
+        }
+
+        .date-widget .widget-title {
+            color: var(--secondary-color);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .date-widget h4 {
+            font-size: 1.4rem;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+
+        .date-item {
+            background-color: rgba(255, 255, 255, 0.08);
+            padding: 0.8rem;
+            border-radius: 6px;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .date-item i {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+        }
+
+        .date-text h5 {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .date-text p {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- SECCIÓN: PILARES PEDAGÓGICOS --- */
+        .pedagogical-section {
+            max-width: 1200px;
+            margin: 4rem auto 2rem auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .section-title {
+            color: #0f3661;
+            font-size: 2.6rem;
+            font-weight: 800;
+            margin-bottom: 3.5rem;
+        }
+
+        .grid-principles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
+        }
+
+        .principle-card {
+            background: var(--text-light);
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.04);
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #eaeaea;
+        }
+
+        .principle-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+        }
+
+        .principle-icon {
+            color: var(--accent-gold);
+            font-size: 1.8rem;
+            margin-bottom: 1.2rem;
+            display: inline-block;
+        }
+
+        .principle-card h4 {
+            color: #0f3661;
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+
+        .principle-card p {
+            color: #666666;
+            font-size: 0.98rem;
+            line-height: 1.6;
+        }
+
+        /* --- SECCIÓN: NUESTROS NIVELES --- */
+        .levels-section {
+            max-width: 1200px;
+            margin: 5rem auto 2rem auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .levels-subtitle {
+            display: inline-block;
+            background-color: #e2eafc;
+            color: #0f3661;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .levels-section h3 {
+            color: #0f3661;
+            font-size: 2.6rem;
+            font-weight: 800;
+            margin-bottom: 1.2rem;
+        }
+
+        .levels-intro {
+            max-width: 850px;
+            margin: 0 auto 4rem auto;
+            color: #555555;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .grid-levels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .level-card {
+            background: var(--text-light);
+            padding: 2.5rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border: 1px solid #f0f0f0;
+        }
+
+        .level-image-container {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 1.8rem;
+            border: 6px solid #ffffff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .level-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .level-card h4 {
+            color: #0f3661;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+
+        .level-card p {
+            color: #666666;
+            font-size: 0.98rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            flex-grow: 1;
+        }
+
+        .btn-level-action {
+            width: 50px;
+            height: 50px;
+            background-color: #ffffff;
+            color: #0f3661;
+            border: 2px solid #e0e0e0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+        }
+
+        .btn-level-action:hover {
+            background-color: #0f3661;
+            color: #ffffff;
+            border-color: #0f3661;
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(13, 59, 102, 0.2);
+        }
+
+        /* --- SECCIÓN: EXPERIENCIA EDUCATIVA --- */
+        .experience-educational-section {
+            background-color: #ffffff;
+            padding: 5rem 2rem;
+            width: 100%;
+            border-top: 1px solid #eef2f5;
+            border-bottom: 1px solid #eef2f5;
+        }
+
+        .exp-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .exp-left-media {
+            flex: 1;
+            max-width: 520px;
+        }
+
+        .exp-left-media img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            border-radius: 25%;
+        }
+
+        .exp-right-content {
+            flex: 1.2;
+            text-align: left;
+        }
+
+        .exp-tagline {
+            color: #7b2cbf;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+
+        .exp-right-content h3 {
+            color: #0f3661;
+            font-size: 2.6rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.2rem;
+        }
+
+        .exp-lead-text {
+            color: #666666;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+        }
+
+        .exp-blocks-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .exp-feature-item {
+            background-color: #f4f7f9;
+            padding: 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .exp-icon-holder {
+            background-color: #e2eafc;
+            color: #0f3661;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .exp-text-holder h5 {
+            color: #0f3661;
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .exp-text-holder p {
+            color: #555555;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        /* --- SECCIÓN: ÚLTIMAS NOTICIAS Y EVENTOS --- */
+        .news-section {
+            max-width: 1200px;
+            margin: 5rem auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .news-section h3 {
+            color: #0f3661;
+            font-size: 2.6rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .news-intro {
+            color: #666666;
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto 3.5rem auto;
+        }
+
+        .grid-news {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            text-align: left;
+        }
+
+        .news-card {
+            background: var(--text-light);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+            border: 1px solid #eaeaea;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none; 
+            color: inherit; 
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+        }
+
+        .news-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+            background-color: #eaeaea; 
+        }
+
+        .news-body {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .news-tag {
+            align-self: flex-start;
+            color: #ffffff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.25rem 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.8rem;
+            border-radius: 3px;
+        }
+
+        .tag-noticia {
+            background-color: #111111;
+        }
+
+        .tag-evento {
+            background-color: #0f3661;
+        }
+
+        .news-body h4 {
+            color: #0f3661;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.7rem;
+            line-height: 1.3;
+        }
+
+        .news-body p {
+            color: #555555;
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+
+        /* --- BANNER DE ADMISIONES ABIERTAS --- */
+        .admissions-banner-container {
+            max-width: 1200px;
+            margin: 0 auto 5rem auto;
+            padding: 0 2rem;
+        }
+
+        .admissions-banner {
+            background-color: #07192b;
+            background-image: linear-gradient(30deg, #0b223a 12%, transparent 12.5%, transparent 87%, #0b223a 87.5%, #0b223a),
+                              linear-gradient(150deg, #0b223a 12%, transparent 12.5%, transparent 87%, #0b223a 87.5%, #0b223a),
+                              linear-gradient(30deg, #0b223a 12%, transparent 12.5%, transparent 87%, #0b223a 87.5%, #0b223a),
+                              linear-gradient(150deg, #0b223a 12%, transparent 12.5%, transparent 87%, #0b223a 87.5%, #0b223a),
+                              linear-gradient(60deg, #091f35 25%, transparent 25.5%, transparent 75%, #091f35 75.5%, #091f35),
+                              linear-gradient(60deg, #091f35 25%, transparent 25.5%, transparent 75%, #091f35 75.5%, #091f35);
+            background-size: 40px 70px;
+            background-position: 0 0, 0 0, 20px 35px, 20px 35px, 0 0, 20px 35px;
+            
+            padding: 3rem 4rem;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            text-align: left;
+        }
+
+        .admissions-content {
+            color: #ffffff;
+        }
+
+        .admissions-content h3 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .admissions-content p {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            font-weight: 400;
+        }
+
+        .btn-admissions {
+            display: inline-block;
+            background-color: #e5ad24; 
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 0.9rem 2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(229, 173, 36, 0.2);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-admissions:hover {
+            background-color: #ca9416;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(229, 173, 36, 0.3);
+        }
+
+        /* --- SECCIÓN: SERVICIOS --- */
+        .services-section {
+            max-width: 1200px;
+            margin: 5rem auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .services-image-container {
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .services-image-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .services-info {
+            flex: 1.2;
+            text-align: left;
+        }
+
+        .services-info h3 {
+            color: #0f3661;
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .services-info .services-description {
+            color: #555555;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .services-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px 30px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .services-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #333333;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .services-list li i {
+            color: #0f3661; 
+            font-size: 1.25rem;
+        }
+
+        /* --- SECCIÓN DE BOTONES DE CONTACTO (BLOQUE) --- */
+        .contact-buttons-section {
+            max-width: 1200px;
+            margin: 4rem auto 2rem auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .contact-buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 1.5rem;
+        }
+
+        .btn-contact {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 0.9rem 2.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-contact i {
+            font-size: 1.3rem;
+        }
+
+        .btn-contact-whatsapp {
+            background-color: #25d366;
+        }
+
+        .btn-contact-whatsapp:hover {
+            background-color: #20ba56;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-contact-instagram {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
+
+        .btn-contact-instagram:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(220, 39, 67, 0.3);
+        }
+
+        /* --- SECCIÓN UBICACIÓN Y MAPA --- */
+        .map-section {
+            background-color: #eeeeee;
+            padding: 2.5rem 0;
+            text-align: center;
+        }
+
+        .map-container {
+            max-width: 900px;
+            margin: 1.5rem auto 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .map-container iframe {
+            max-width: 100%; 
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: block;
+        }
+
+        /* --- Pie de Página --- */
+        .custom-footer {
+            background-color: #0b223a;
+            color: #ffffff;
+            padding: 4rem 2rem;
+            font-size: 0.95rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1fr; 
+            gap: 40px;
+        }
+
+        .footer-logos {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .footer-logos img {
+            max-width: 160px;
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .footer-column {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .footer-block h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #ffffff;
+        }
+
+        .footer-block p {
+            color: #a0b2c6;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: #a0b2c6;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #ffffff;
+        }
+
+        .contenedor-reporte-nuevo {
+            margin-top: 10px;
+        }
+
+        .btn-reporte-footer {
+            display: inline-block;
+            color: #ff5252;
+            font-weight: bold;
+            text-decoration: underline;
+            font-size: 1.05rem;
+            transition: color 0.3s ease;
+        }
+
+        .btn-reporte-footer:hover {
+            color: #ff7b7b;
+        }
+
+        /* --- BOTONES FLOTANTES DE REDES SOCIALES (ESQUINA) --- */
+        .floating-social-container {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 9999;
+        }
+
+        .floating-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 1.8rem;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+        }
+
+        .btn-floating-whatsapp {
+            background-color: #25d366;
+        }
+
+        .btn-floating-instagram {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
+
+        /* Responsividad */
+        @media (max-width: 900px) {
+            .nav-container ul {
+                gap: 15px;
+                flex-wrap: wrap;
+                padding: 0.5rem;
+            }
+            .nav-container li a {
+                padding: 0.5rem 0;
+                font-size: 1rem;
+            }
+            .header-branding h1 { font-size: 1.7rem; }
+            .header-branding p { font-size: 0.95rem; }
+
+            /* Ajuste del banner en móviles */
+            .hero-banner-container {
+                flex-direction: column;
+                padding: 0 1rem;
+                margin: 1rem auto 0 auto;
+                gap: 10px;
+            }
+            .banner-slider {
+                min-height: 200px;
+            }
+            .banner-dates-sidebar {
+                margin-left: 0; /* Se quita el margen en móvil para centrar */
+            }
+
+            .exp-wrapper {
+                flex-direction: column;
+                text-align: center;
+                gap: 30px;
+            }
+            .exp-right-content {
+                text-align: center;
+            }
+
+            .services-section {
+                flex-direction: column;
+                text-align: center;
+                gap: 30px;
+            }
+            .services-info {
+                text-align: center;
+            }
+            .services-list {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                display: inline-block;
+                text-align: left;
+            }
+            .services-list li {
+                margin-bottom: 10px;
+            }
+
+            .admissions-banner {
+                flex-direction: column;
+                text-align: center;
+                gap: 2rem;
+                padding: 2.5rem 2rem;
+            }
+
+            .admissions-content h3 {
+                font-size: 1.9rem;
+            }
+
+            .contact-buttons-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+
+            .btn-contact {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 35px;
+                text-align: center;
+            }
+
+            .footer-logos {
+                align-items: center;
+            }
+
+            .floating-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.6rem;
+            }
+            .floating-social-container {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="top-social-bar">
+            <a href="https://www.instagram.com/ceasantiago7/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </div>
+
+        <div class="header-branding">
+            <img src="files/logounaca.png" alt="Escudo Centro Educativo Adventista" class="main-logo">
+            <h1>CENTRO EDUCATIVO ADVENTISTA</h1>
+            <p>"EDUCAR ES REDIMIR"</p>
+        </div>
+
+        <nav class="main-nav">
+            <div class="nav-container">
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="#nosotros">Acerca de</a></li>
+                    <li><a href="admisiones.html" class="highlight">Admisiones</a></li>
+                    <li><a href="eventos-noticias.html">Eventos y Noticias</a></li>
+                    <li><a href="biblioteca.html">Biblioteca Virtual</a></li>
+                    <li><a href="#ubicacion" class="highlight">Contacto</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="hero-banner-container">
+        <div class="banner-slider">
+            <img src="files/banner1.png" alt="Banner Institucional CEAD 1" class="slide-img active">
+            <img src="files/banner2.png" alt="Banner Institucional CEAD 2" class="slide-img">
+        </div>
+        
+        <div class="banner-dates-sidebar">
+            <div class="date-widget active">
+                <span class="widget-title">Próximos Eventos</span>
+                <h4>Calendario Escolar</h4>
+                <div class="date-item">
+                    <i class="fas fa-calendar-day"></i>
+                    <div class="date-text">
+                        <h5>Musical "El Arca"</h5>
+                        <p>Domingo 24 de Mayo</p>
+                    </div>
+                </div>
+                <div class="date-item">
+                    <i class="fas fa-calendar-check"></i>
+                    <div class="date-text">
+                        <h5>Cierre de Admisiones</h5>
+                        <p>Próximamente</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="date-widget">
+                <span class="widget-title">Fechas Importantes</span>
+                <h4>Evaluaciones y Cierres</h4>
+                <div class="date-item">
+                    <i class="fas fa-graduation-cap"></i>
+                    <div class="date-text">
+                        <h5>Despedida de 6to</h5>
+                        <p>Cierre de Año Escolar</p>
+                    </div>
+                </div>
+                <div class="date-item">
+                    <i class="fas fa-flask"></i>
+                    <div class="date-text">
+                        <h5>Feria Científica</h5>
+                        <p>Exposiciones 2026</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section id="nosotros" class="pedagogical-section">
+        <h3 class="section-title">Principios Pedagógicos</h3>
+
+        <div class="grid-principles">
+            <div class="principle-card">
+                <div class="principle-icon"><i class="fas fa-book-open"></i></div>
+                <h4>Educación Integral</h4>
+                <p>Desarrollar al estudiante en lo académico, físico, emocional, social y espiritual.</p>
+            </div>
+
+            <div class="principle-card">
+                <div class="principle-icon"><i class="fas fa-cross"></i></div>
+                <h4>Valores Cristianos</h4>
+                <p>Incluir principios bíblicos como respeto, responsibility y compasión en todas las áreas.</p>
+            </div>
+
+            <div class="principle-card">
+                <div class="principle-icon"><i class="fas fa-brain"></i></div>
+                <h4>Aprendizaje Activo</h4>
+                <p>Fomenta la participación, curiosidad y pensamiento crítico mediante experiencias prácticas.</p>
+            </div>
+
+            <div class="principle-card">
+                <div class="principle-icon"><i class="fas fa-users"></i></div>
+                <h4>Inclusión y Diversidad</h4>
+                <p>Crear un ambiente inclusivo que valore las diferencias individuales.</p>
+            </div>
+
+            <div class="principle-card">
+                <div class="principle-icon"><i class="fas fa-handshake"></i></div>
+                <h4>Servicio</h4>
+                <p>Inspirar a los estudiantes a usar sus habilidades para servir a la comunidad.</p>
+            </div>
+
+            <div class="principle-card">
+                <div class="principle-icon"><i class="fas fa-search"></i></div>
+                <h4>Aprendizaje</h4>
+                <p>Promover el amor por el aprendizaje y el crecimiento continuo.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="niveles" class="levels-section">
+        <span class="levels-subtitle">Niveles</span>
+        <h3>Nuestros niveles</h3>
+        <p class="levels-intro">
+            En el Colegio Adventista Dominicano ofrecemos una formación integral desde Inicial, pasando por Primaria, hasta Secundaria. Cada nivel está diseñado para desarrollar valores, conocimientos y habilidades, guiando a nuestros estudiantes hacia el éxito académico y espiritual.
+        </p>
+
+        <div class="grid-levels">
+            <div class="level-card">
+                <div class="level-image-container">
+                    <img src="files/inicial.webp" alt="Estudiantes de Nivel Inicial">
+                </div>
+                <h4>Nivel Inicial</h4>
+                <p>Estimulamos la curiosidad natural, la creatividad y la socialización temprana en un entorno lúdico, seguro y guiado por valores cristianos esenciales.</p>
+                <a href="admisiones.html" class="btn-level-action" aria-label="Saber más sobre Nivel Inicial">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </div>
+
+            <div class="level-card">
+                <div class="level-image-container">
+                    <img src="files/primaria.webp" alt="Estudiantes de Nivel Primario">
+                </div>
+                <h4>Nivel Primario</h4>
+                <p>Establecemos bases académicas firmes mediante el desarrollo del pensamiento lógico, la comprensión lectora y el fortalecimiento de la autonomía personal.</p>
+                <a href="admisiones.html" class="btn-level-action" aria-label="Saber más sobre Nivel Primario">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </div>
+
+            <div class="level-card">
+                <div class="level-image-container">
+                    <img src="files/LMQTROS.jpg" alt="Estudiante de Nivel Secundario">
+                </div>
+                <h4>Nivel Secundario</h4>
+                <p>Preparamos a los jóvenes para los retos de la educación superior y la vida ciudadana, consolidando el análisis crítico y un fuerte compromiso ético de servicio.</p>
+                <a href="admisiones.html" class="btn-level-action" aria-label="Saber más sobre Nivel Secundario">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="experience-educational-section">
+        <div class="exp-wrapper">
+            <div class="exp-left-media">
+                <img src="files/brande-ejemplo.jpg" alt="Experiencia Educativa CEAD">
+            </div>
+
+            <div class="exp-right-content">
+                <span class="exp-tagline">Ya puedes ser parte de nuestra Familia CEAD</span>
+                <h3>Forma parte de nuestra experiencia Educativa CEAD</h3>
+                <p class="exp-lead-text">
+                    Brindamos herramientas modernas e interactivas integradas a nuestro modelo académico para asegurar una formación continua, accesible y alineada a los principios institucionales.
+                </p>
+
+                <div class="exp-blocks-container">
+                    <div class="exp-feature-item">
+                        <div class="exp-icon-holder"><i class="fas fa-book"></i></div>
+                        <div class="exp-text-holder">
+                            <h5>Biblioteca Virtual</h5>
+                            <p>Accede a una amplia colección de libros y recursos digitales desde cualquier lugar.</p>
+                        </div>
+                    </div>
+
+                    <div class="exp-feature-item">
+                        <div class="exp-icon-holder"><i class="fas fa-laptop"></i></div>
+                        <div class="exp-text-holder">
+                            <h5>Actividades en equipo</h5>
+                            <p>Fomentamos el compañerismo y el desarrollo social mediante proyectos colaborativos y trabajos grupales dinámicos.</p>
+                        </div>
+                    </div>
+
+                    <div class="exp-feature-item">
+                        <div class="exp-icon-holder"><i class="fas fa-graduation-cap"></i></div>
+                        <div class="exp-text-holder">
+                            <h5>Actos cívicos</h5>
+                            <p>Abanderadas & Marching Band - Impulsamos el respeto a los símbolos patrios, la disciplina y el talento musical de nuestros estudiantes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="noticias" class="news-section">
+        <h3>Últimas Noticias y Eventos</h3>
+        <p class="news-intro">
+            Mantente al día con lo más reciente del Centro Educativo Adventista. Descubre eventos, logros y actividades que destacan el compromiso de nuestra comunidad educativa.
+        </p>
+
+        <div class="grid-news">
+            <a href="cuerpo-articulo.html?id=e1" class="news-card">
+                <img src="files/Eventos/1.jpg" alt="Evento 1" class="news-image">
+                <div class="news-body">
+                    <span class="news-tag tag-evento">Eventos</span>
+                    <h4>El Arca: Salvación</h4>
+                    <p>Una aventura musical para toda la familia  Fecha: Domingo 24 de mayo  Primera función: 4:00 PM  Segunda función: 6:00 PM  Lugar: Centro de la Cultura de Santiago.</p>
+                </div>
+            </a>
+
+            <a href="cuerpo-articulo.html?id=e2" class="news-card">
+                <img src="files/Eventos/2.jpg" alt="Evento 2" class="news-image">
+                <div class="news-body">
+                    <span class="news-tag tag-evento">Eventos</span>
+                    <h4>Ultima sociadad de menores 2025-2026</h4>
+                    <p>Vivimos una sociedad de menores muy especial, dedicada a despedir con cariño a nuestros estudiantes de 6to de secundaria en este cierre de año escolar.</p>
+                </div>
+            </a>
+
+            <a href="cuerpo-articulo.html?id=n1" class="news-card">
+                <img src="files/Feria/2.jpg" alt="Noticia 1" class="news-image">
+                <div class="news-body">
+                    <span class="news-tag tag-noticia">Noticias</span>
+                    <h4>Feria Científica Y Matematica 2026</h4>
+                    <p>Estudiantes participaron en una exposición educativa donde presentaron proyectos creativos y demostraron su talento y trabajo en equipo.</p>
+                </div>
+            </a>
+
+            <a href="cuerpo-articulo.html?id=n2" class="news-card">
+                <img src="files/Guardianes/5.jpeg" alt="Noticia 2" class="news-image">
+                <div class="news-body">
+                    <span class="news-tag tag-noticia">Noticias</span>
+                    <h4>El Equipo de Basket del CEAD Sigue Invicto 7-0</h4>
+                    <p>El equipo de los Guardianes continúa demostrando su dominio en la cancha tras mantenerse invicto con un impresionante récord de 7-0 frente a todos los equipos.</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <div class="admissions-banner-container">
+        <div class="admissions-banner">
+            <div class="admissions-content">
+                <h3>Admisiones abiertas</h3>
+                <p>No pierdas tiempo, llámanos o escríbenos en línea</p>
+            </div>
+            <a href="admisiones.html" class="btn-admissions">Empiece aquí</a>
+        </div>
+    </div>
+
+    <section id="servicios" class="services-section">
+        <div class="services-image-container">
+            <img src="files/profe.webp" alt="Personal de servicios">
+        </div>
+        <div class="services-info">
+            <h3>Servicios</h3>
+            <p class="services-description">
+                Ofrecemos una educación integral que combina excelencia académica, desarrollo espiritual, acceso a bibliotecas, apoyo emocional, actividades extracurriculares, y un enfoque en valores cristianos.
+            </p>
+            <ul class="services-list">
+                <li><i class="fa-solid fa-circle-check"></i> Aulas climatizadas</li>
+                <li><i class="fa-solid fa-circle-check"></i> Actividades artísticas</li>
+                <li><i class="fa-solid fa-circle-check"></i> Inglés</li>
+                <li><i class="fa-solid fa-circle-check"></i> Laboratorios de ciencias</li>
+                <li><i class="fa-solid fa-circle-check"></i> Actividades deportivas</li>
+                <li><i class="fa-solid fa-circle-check"></i> Clases de pintura</li>
+                <li><i class="fa-solid fa-circle-check"></i> Laboratorios de informática</li>
+                <li><i class="fa-solid fa-circle-check"></i> Abanderadas y Marching Band</li>
+                <li><i class="fa-solid fa-circle-check"></i> Orientación y Psicología</li>
+                <li><i class="fa-solid fa-circle-check"></i> Orientación espiritual</li>
+                <li><i class="fa-solid fa-circle-check"></i> Librería y copiado</li>
+                <li><i class="fa-solid fa-circle-check"></i> Sala de tareas</li>
+                <li><i class="fa-solid fa-circle-check"></i> Biblioteca</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="conecta" class="contact-buttons-section">
+        <h3 style="color: var(--primary-color); font-size: 1.8rem; font-weight: 800;">Conéctate con Nosotros</h3>
+        <div class="contact-buttons-container">
+            <a href="https://wa.me/18095833432" target="_blank" rel="noopener noreferrer" class="btn-contact btn-contact-whatsapp">
+                <i class="fab fa-whatsapp"></i> Contactar por WhatsApp
+            </a>
+            <a href="https://www.instagram.com/ceasantiago7/" target="_blank" rel="noopener noreferrer" class="btn-contact btn-contact-instagram">
+                <i class="fab fa-instagram"></i> Síguenos en Instagram
+            </a>
+        </div>
+    </section>
+
+    <section id="ubicacion" class="map-section">
+        <h3 style="color: var(--primary-color); font-size: 1.5rem;">Nuestra Ubicación</h3>
+        <div class="map-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13301.836606366212!2d-70.70605141084005!3d19.461181511249457!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8eb1cf59c9aa6521%3A0x573c7c6217e0ce32!2sCentro%20Educativo%20Adventista!5e0!3m2!1ses-419!2sdo!4v1779736425338!5m2!1ses-419!2sdo" width="800" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </section>
+
+    <footer class="custom-footer">
+        <div class="footer-container">
+            <div class="footer-logos">
+                <img src="files/logounaca.png" alt="Logo UNACA">
+                <img src="files/iasdlogo.png" alt="Logo IASD">
+            </div>
+
+            <div class="footer-column">
+                <div class="footer-block">
+                    <h4>Otros recursos</h4>
+                    <ul class="footer-links">
+                        <li><a href="#conecta">Contactos</a></li>
+                        <li><a href="#">Directorio</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <div class="footer-block">
+                    <h4>Links importantes</h4>
+                    <ul class="footer-links">
+                        <li><a href="cookies.html#privacy">Privacy Policy</a></li>
+                        <li><a href="cookies.html#cookies">Cookies Policy</a></li>
+                        <li><a href="cookies.html#terms">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="floating-social-container">
+        <a href="https://wa.me/18095833432" target="_blank" rel="noopener noreferrer" class="floating-btn btn-floating-whatsapp" aria-label="Chat en WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://www.instagram.com/ceasantiago7/" target="_blank" rel="noopener noreferrer" class="floating-btn btn-floating-instagram" aria-label="Síguenos en Instagram">
+            <i class="fab fa-instagram"></i>
+        </a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide-img');
+            const widgets = document.querySelectorAll('.date-widget');
+            let currentSlide = 0;
+            const slideInterval = 20000; // 20 segundos en milisegundos
+
+            function nextSlide() {
+                // Quitar clase activa del estado actual
+                slides[currentSlide].classList.remove('active');
+                widgets[currentSlide].classList.remove('active');
+                
+                // Calcular siguiente índice
+                currentSlide = (currentSlide + 1) % slides.length;
+                
+                // Añadir clase activa al nuevo estado
+                slides[currentSlide].classList.add('active');
+                widgets[currentSlide].classList.add('active');
+            }
+
+            // Iniciar la rotación automática
+            setInterval(nextSlide, slideInterval);
+        });
+    </script>
+
+</body>
+</html>

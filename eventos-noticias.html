@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos y Noticias | CEAD</title>
+    <link rel="icon" sizes="192x192" href="files/logounaca.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0d3b66;
+            --primary-dark: #0b223a;
+            --accent: #dfb24b;
+            --bg: #f4f7f9;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --text-muted: #666666;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navbar institucional */
+        .header-nav {
+            background-color: var(--primary-dark);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-nav .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .header-nav img {
+            height: 45px;
+        }
+
+        .btn-back {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+
+        .btn-back:hover { color: var(--accent); }
+
+        /* Encabezado de la página */
+        .page-hero {
+            background: linear-gradient(rgba(11, 34, 58, 0.85), rgba(11, 34, 58, 0.95)), url('files/secundaria.webp') no-repeat center/cover;
+            color: white;
+            text-align: center;
+            padding: 5rem 2rem;
+        }
+
+        .page-hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        /* Barra de Filtros */
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: -25px auto 3rem auto;
+            max-width: 500px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .filter-btn {
+            background-color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary);
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background-color: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Grid de Artículos */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto 5rem auto;
+            padding: 0 2rem;
+        }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 35px;
+        }
+
+        .article-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+            border: 1px solid #eaeaea;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+        }
+
+        .card-img-wrapper {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background-color: #eaeaea;
+        }
+
+        .card-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.3rem 0.8rem;
+            text-transform: uppercase;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .badge.evento { background-color: var(--primary); }
+        .badge.noticia { background-color: #111111; }
+
+        .card-body {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-date {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .card-body h3 {
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .card-body p {
+            color: #555555;
+            font-size: 0.95rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical; /* Corregido: añadido guion inicial faltante */
+            overflow: hidden;
+        }
+
+        footer {
+            background-color: var(--primary-dark);
+            color: #a0b2c6;
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        @media (max-width: 600px) {
+            .page-hero h1 { font-size: 2rem; }
+            .filter-bar { flex-direction: column; padding: 0 2rem; }
+            .filter-btn { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header-nav">
+        <a href="index.html" class="logo-area">
+            <img src="files/logounaca.png" alt="Logo">
+            <h2 style="font-size: 1.2rem;">CEAD Santiago</h2>
+        </a>
+        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Inicio</a>
+    </header>
+
+    <section class="page-hero">
+        <h1>Eventos y Noticias</h1>
+        <p>Entérate de las actividades, logros y novedades de nuestra comunidad escolar</p>
+    </section>
+
+    <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterItems(event, 'all')">Todo</button>
+        <button class="filter-btn" onclick="filterItems(event, 'evento')">Eventos</button>
+        <button class="filter-btn" onclick="filterItems(event, 'noticia')">Noticias</button>
+    </div>
+
+    <main class="main-container">
+        <div class="articles-grid">
+            
+            <a href="cuerpo-articulo.html?id=e1" class="article-card" data-type="evento">
+                <div class="card-img-wrapper"><img src="files/noticia1.webp" alt=""><span class="badge evento">Evento</span></div>
+                <div class="card-body">
+                    <div class="card-date">28 May, 2026</div>
+                    <h3>Feria Científica Institucional 2026</h3>
+                    <p>Nuestros estudiantes presentarán proyectos innovadores enfocados en tecnología sostenible y experimentos de física y química.</p>
+                </div>
+            </a>
+
+            <a href="cuerpo-articulo.html?id=e2" class="article-card" data-type="evento">
+                <div class="card-img-wrapper"><img src="files/noticia2.webp" alt=""><span class="badge evento">Evento</span></div>
+                <div class="card-body">
+                    <div class="card-date">05 Jun, 2026</div>
+                    <h3>Campamento Espiritual "Redimidos"</h3>
+                    <p>Un fin de semana dedicado a la reflexión, comunión y actividades recreativas en la naturaleza para el nivel secundario.</p>
+                </div>
+            </a>
+
+            <a href="cuerpo-articulo.html?id=e3" class="article-card" data-type="evento">
+                <div class="card-img-wrapper"><img src="files/inicial.webp" alt=""><span class="badge evento">Evento</span></div>
+                <div class="card-body">
+                    <div class="card-date">12 Jun, 2026</div>
+                    <h3>Día Familiar de Deportes</h3>
+                    <p>Convocamos a todos los padres y alumnos a participar en nuestro torneo anual de atletismo, baloncesto y voleibol.</p>
+                </div>
+            </a>
+
+            <a href="cuerpo-articulo.html?id=e4" class="article-card" data-type="evento">
+                <div class="card-img-wrapper"><img src="files/primaria.webp" alt=""><span class="badge evento">Evento</span></div>
+                <div class="card-body">
+                    <div class="card-date">22 Jun, 2026</div>
+                    <h3>Recital de Música y Marching Band</h3>
+                    <p>Disfruta de la gala musical de la Marching Band del CEAD y las presentaciones del taller coral y de pintura.</p>
+                </div>
+            </a>
+
+            <a href="cuerpo-articulo.html?id=e5" class="article-card" data-type="evento">
+                <div class="card-img-wrapper"><img src="files/secundaria.webp" alt=""><span class="badge evento">Evento</span></div>
+                <div class="card-body">
+                    <div class="card-date">30 Jun, 2026</div>
+                    <h3>Ceremonia de Graduación de Secundaria</h3>
+                    <p>Acompáñanos a celebrar el logro académico de nuestra promoción saliente en su camino hacia la educación superior.</p>
+                </div>
+            </a>
+
+
+            <a href="cuerpo-articulo.html?id=n1" class="article-card" data-type="noticia">
+                <div class="card-img-wrapper"><img src="files/Feria/2.jpg" alt=""><span class="badge noticia">Noticia</span></div>
+                <div class="card-body">
+                    <div class="card-date">14 Mayo, 2026</div>
+                    <h3>Feria Científica Y Matematica 2026</h3>
+                    <p>Estudiantes participaron en una exposición educativa donde presentaron proyectos creativos y demostraron su talento y trabajo en equipo.</p>
+                </div>
+            </a>
+
+            <a href="cuerpo-articulo.html?id=n2" class="article-card" data-type="noticia">
+                <div class="card-img-wrapper"><img src="files/noticia4.webp" alt=""><span class="badge noticia">Noticia</span></div>
+                <div class="card-body">
+                    <div class="card-date">7 May, 2026</div>
+                    <h3>CEAD Obtiene Primer Lugar en Olimpíadas de Matemática</h3>
+                    <p>Felicitamos a nuestro equipo de secundaria por destacar y ganar el máximo galardón en la competencia distrital.</p>
+                </div>
+            </a>
+
+            <a href="cuerpo-articulo.html?id=n3" class="article-card" data-type="noticia">
+                <div class="card-img-wrapper"><img src="files/profe.webp" alt=""><span class="badge noticia">Noticia</span></div>
+                <div class="card-body">
+                    <div class="card-date">15 May, 2026</div>
+                    <h3>Taller de Capacitación Docente en Nuevas Tecnologías</h3>
+                    <p>Nuestro cuerpo de profesores participó activamente en seminarios para la integración de aulas virtuales interactivas.</p>
+                </div>
+            </a>
+
+            <a href="cuerpo-articulo.html?id=n4" class="article-card" data-type="noticia">
+                <div class="card-img-wrapper"><img src="files/secundaria.webp" alt=""><span class="badge noticia">Noticia</span></div>
+                <div class="card-body">
+                    <div class="card-date">10 May, 2026</div>
+                    <h3>Lanzamiento oficial de la Nueva Biblioteca Virtual</h3>
+                    <p>A partir de esta semana los estudiantes cuentan con acceso a miles de libros en formato PDF y enciclopedias web desde casa.</p>
+                </div>
+            </a>
+
+            <a href="cuerpo-articulo.html?id=n5" class="article-card" data-type="noticia">
+                <div class="card-img-wrapper"><img src="files/inicial.webp" alt=""><span class="badge noticia">Noticia</span></div>
+                <div class="card-body">
+                    <div class="card-date">05 May, 2026</div>
+                    <h3>Proyecto de Huertos Escolares en Nivel Inicial</h3>
+                    <p>Los más pequeños aprenden sobre la creación divina y la naturaleza cultivando sus propias hortalizas y plantas.</p>
+                </div>
+            </a>
+
+            <a href="cuerpo-articulo.html?id=n6" class="article-card" data-type="noticia">
+                <div class="card-img-wrapper"><img src="files/primaria.webp" alt=""><span class="badge noticia">Noticia</span></div>
+                <div class="card-body">
+                    <div class="card-date">01 May, 2026</div>
+                    <h3>Campaña de Salud Bucal de Regreso a Clases</h3>
+                    <p>Especialistas médicos visitaron nuestras instalaciones para ofrecer chequeos gratuitos y charlas de higiene a Primaria.</p>
+                </div>
+            </a>
+
+            <a href="cuerpo-articulo.html?id=n7" class="article-card" data-type="noticia">
+                <div class="card-img-wrapper"><img src="files/noticia1.webp" alt=""><span class="badge noticia">Noticia</span></div>
+                <div class="card-body">
+                    <div class="card-date">25 Abr, 2026</div>
+                    <h3>Donación Especial de Instrumentos a la Marching Band</h3>
+                    <p>Agradecemos a la junta de egresados por la entrega de nuevos tambores y trompetas para nuestras presentaciones patrias.</p>
+                </div>
+            </a>
+
+            <a href="cuerpo-articulo.html?id=n8" class="article-card" data-type="noticia">
+                <div class="card-img-wrapper"><img src="files/noticia2.webp" alt=""><span class="badge noticia">Noticia</span></div>
+                <div class="card-body">
+                    <div class="card-date">20 Abr, 2026</div>
+                    <h3>Charla de Orientación Vocacional para Alumnos de Término</h3>
+                    <p>Universidades aliadas compartieron su oferta curricular y planes de becas con los alumnos de último año de bachillerato.</p>
+                </div>
+            </a>
+
+            <a href="cuerpo-articulo.html?id=n9" class="article-card" data-type="noticia">
+                <div class="card-img-wrapper"><img src="files/noticia3.webp" alt=""><span class="badge noticia">Noticia</span></div>
+                <div class="card-body">
+                    <div class="card-date">15 Abr, 2026</div>
+                    <h3>Reconocimiento al Mérito Estudiantil del Primer Periodo</h3>
+                    <p>En un acto solemne, galardonamos el esfuerzo de los estudiantes que alcanzaron el cuadro de honor y excelencia académica.</p>
+                </div>
+            </a>
+
+            <a href="cuerpo-articulo.html?id=n10" class="article-card" data-type="noticia">
+                <div class="card-img-wrapper"><img src="files/noticia4.webp" alt=""><span class="badge noticia">Noticia</span></div>
+                <div class="card-body">
+                    <div class="card-date">10 Abr, 2026</div>
+                    <h3>Simulacro de Evacuación Exitoso</h3>
+                    <p>En coordinación con la defensa civil, realizamos prácticas de prevención ante sismos asegurando la preparación de todos.</p>
+                </div>
+            </a>
+
+        </div>
+    </main>
+
+    <footer>
+        © 2026 Centro Educativo Adventista (CEAD) - Educando para la Eternidad.
+    </footer>
+
+    <script>
+        // Corregido: Se recibe formalmente el objeto 'evt'
+        function filterItems(evt, category) {
+            // Cambiar estado activo en botones
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Corregido: Se usa evt.currentTarget de manera segura
+            evt.currentTarget.classList.add('active');
+
+            // Filtrar las tarjetas
+            const cards = document.querySelectorAll('.article-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-type') === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

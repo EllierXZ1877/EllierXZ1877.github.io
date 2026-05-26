@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Virtual | CEAD</title>
+    <link rel="icon" sizes="192x192" href="files/logounaca.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0d3b66;
+            --primary-dark: #0b223a;
+            --accent: #dfb24b;
+            --bg: #f4f7f9;
+            --card-bg: #ffffff;
+            --text: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- PANTALLA DE ACCESO (LOGIN) --- */
+        .login-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(11, 34, 58, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .login-box {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .login-box img {
+            height: 70px;
+            margin-bottom: 1rem;
+        }
+
+        .login-box h2 {
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.6rem;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group select:focus, .form-group input:focus {
+            border-color: var(--primary);
+        }
+
+        .remember-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+            text-align: left;
+            font-size: 0.9rem;
+            color: #555;
+            cursor: pointer;
+        }
+
+        .remember-box input {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .btn-login {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.9rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-login:hover { background-color: var(--primary-dark); }
+        
+        .login-error {
+            color: #e63946;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        /* --- CONTENIDO PRINCIPAL --- */
+        .library-content {
+            display: none; 
+        }
+
+        .header-nav {
+            background-color: var(--primary-dark);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-nav .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .header-nav img { height: 40px; }
+
+        .user-info-bar {
+            background-color: #e2eafc;
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--primary-dark);
+            box-shadow: inset 0 -2px 5px rgba(0,0,0,0.05);
+        }
+
+        .stats-badge {
+            background: var(--primary);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .library-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #eef2f5;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .book-cover {
+            height: 220px;
+            background: #eaeaea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .book-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .book-body {
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .book-body h3 {
+            font-size: 1.1rem;
+            color: var(--primary-dark);
+            margin-bottom: 0.4rem;
+        }
+
+        .book-author {
+            font-size: 0.85rem;
+            color: #777;
+            margin-bottom: 1rem;
+        }
+
+        .book-actions {
+            margin-top: auto;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-book {
+            flex: 1;
+            text-align: center;
+            padding: 0.6rem 0.2rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .btn-open {
+            background-color: #fff;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-open:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-download {
+            background-color: var(--accent);
+            color: white;
+            border: 2px solid var(--accent);
+        }
+
+        .btn-download:hover {
+            background-color: #cb9b2d;
+            border-color: #cb9b2d;
+        }
+
+        footer {
+            background-color: var(--primary-dark);
+            color: #a0b2c6;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: auto;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-box">
+            <img src="files/logounaca.png" alt="CEAD">
+            <h2>Biblioteca Virtual CEAD</h2>
+            
+            <div class="form-group">
+                <label for="cursoSelect">Selecciona tu curso:</label>
+                <select id="cursoSelect" onchange="actualizarPlaceholder()">
+                    <option value="1ro">1ro de Secundaria</option>
+                    <option value="2do">2do de Secundaria</option>
+                    <option value="3ro" selected>3ro de Secundaria</option>
+                    <option value="4to">4to de Secundaria</option>
+                    <option value="5to">5to de Secundaria</option>
+                    <option value="6to">6to de Secundaria</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="passwordInput">Contraseña del Curso:</label>
+                <input type="text" id="passwordInput" placeholder="Ej: 3ro-2aB83M">
+            </div>
+
+            <label class="remember-box">
+                <input type="checkbox" id="rememberMe"> Recordar mi curso y contraseña
+            </label>
+
+            <button class="btn-login" onclick="validarAcceso()">Ingresar a la Biblioteca</button>
+            <div id="loginError" class="login-error">Contraseña incorrecta.</div>
+        </div>
+    </div>
+
+
+    <div id="libraryContent" class="library-content">
+        
+        <header class="header-nav">
+            <a href="index.html" class="logo-area">
+                <img src="files/logounaca.png" alt="Logo">
+                <h2 style="font-size: 1.2rem;">CEAD Santiago</h2>
+            </a>
+            <a href="index.html" style="color: white; text-decoration: none; font-weight: 600;"><i class="fas fa-sign-out-alt"></i> Salir</a>
+        </header>
+
+        <div class="user-info-bar">
+            <div><i class="fas fa-graduation-cap"></i> Grado Activo: <span id="sessionCurso">Ninguno</span></div>
+            <div class="stats-badge">
+                <i class="fas fa-chart-bar"></i> Libros usados por este curso: <span id="courseCounter">0</span>
+            </div>
+        </div>
+
+        <main class="main-container">
+            <h2 style="color: var(--primary-dark); margin-bottom: 2rem; font-size: 1.8rem;"><i class="fas fa-layer-group"></i> Catálogo de Materiales Educativos</h2>
+            
+            <div class="library-grid">
+                
+                <div class="book-card">
+                    <div class="book-cover"><img src="files/inicial.webp" alt="Matemáticas"></div>
+                    <div class="book-body">
+                        <h3>Matemáticas Avanzadas I</h3>
+                        <p class="book-author">Ministerio de Educación</p>
+                        <div class="book-actions">
+                            <a href="files/libros/matematicas3.pdf" target="_blank" class="btn-book btn-open" onclick="registrarUso()"><i class="fas fa-eye"></i> Abrir libro</a>
+                            <a href="files/libros/matematicas3.pdf" download class="btn-book btn-download" onclick="registrarUso()"><i class="fas fa-download"></i> Descargar libro</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-card">
+                    <div class="book-cover"><img src="files/primaria.webp" alt="Lengua Española"></div>
+                    <div class="book-body">
+                        <h3>Lengua Española y Literatura</h3>
+                        <p class="book-author">Santillana Serie Innova</p>
+                        <div class="book-actions">
+                            <a href="files/libros/lengua3.pdf" target="_blank" class="btn-book btn-open" onclick="registrarUso()"><i class="fas fa-eye"></i> Abrir libro</a>
+                            <a href="files/libros/lengua3.pdf" download class="btn-book btn-download" onclick="registrarUso()"><i class="fas fa-download"></i> Descargar libro</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-card">
+                    <div class="book-cover"><img src="files/secundaria.webp" alt="Ciencias de la Naturaleza"></div>
+                    <div class="book-body">
+                        <h3>Ciencias de la Naturaleza (Física)</h3>
+                        <p class="book-author">Ediciones SM</p>
+                        <div class="book-actions">
+                            <a href="files/libros/ciencias3.pdf" target="_blank" class="btn-book btn-open" onclick="registrarUso()"><i class="fas fa-eye"></i> Abrir libro</a>
+                            <a href="files/libros/ciencias3.pdf" download class="btn-book btn-download" onclick="registrarUso()"><i class="fas fa-download"></i> Descargar libro</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-card">
+                    <div class="book-cover"><img src="files/noticia1.webp" alt="Historia"></div>
+                    <div class="book-body">
+                        <h3>Historia Dominicana y Geografía</h3>
+                        <p class="book-author">Colección MINERD</p>
+                        <div class="book-actions">
+                            <a href="files/libros/historia3.pdf" target="_blank" class="btn-book btn-open" onclick="registrarUso()"><i class="fas fa-eye"></i> Abrir libro</a>
+                            <a href="files/libros/historia3.pdf" download class="btn-book btn-download" onclick="registrarUso()"><i class="fas fa-download"></i> Descargar libro</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <footer>
+            © 2026 Centro Educativo Adventista (CEAD) - Sistema de Gestión Bibliotecaria.
+        </footer>
+    </div>
+
+    <script>
+        let cursoActualGlobal = ""; // Guarda el curso logueado
+
+        const contrasenasValidas = {
+            '1ro': ['1ro-A83b9X', '1ro-k2M7pQ', '1ro-L9s2vW', '1ro-m4N1xZ', '1ro-P7q5rT', '1ro-R3w8tY', '1ro-V6b2nM', '1ro-X9p4kL', '1ro-Z1s7vQ', '1ro-H4m8xK', '1ro-J2w5tP', '1ro-K9b3nR', '1ro-N7s1vW', '1ro-Q4p8kL', '1ro-T2m6xZ', '1ro-W9s3vQ', '1ro-Y1b7nR', '1ro-B4p5kM', '1ro-D8m2xT', '1ro-F6w9tP', '1ro-G3s1vL', '1ro-K7b4nQ', '1ro-M9p2kX', '1ro-P1m5xW', '1ro-S8w3tZ'],
+            '2do': ['2do-B92c4Y', '2do-m3N8qR', '2do-P1s3wX', '2do-v5b6nT', '2do-X8p2kM', '2do-Z4m7xL', '2do-H1w9tQ', '2do-K6s2vP', '2do-N3b8nR', '2do-Q9p5kW', '2do-T4m1xZ', '2do-W7s3vQ', '2do-Y2b8nM', '2do-C6p4kL', '2do-E1m9xT', '2do-F4w2tP', '2do-G8s7vW', '2do-J3b1nR', '2do-L9p5kX', '2do-M2m6xQ', '2do-P7w3tZ', '2do-R1s9vL', '2do-V4b2nK', '2do-X7p8kW', '2do-Z3m5xM'],
+            '3ro': ['3ro-2aB83M', '3ro-p4K9qX', '3ro-S2v7wL', '3ro-m5N3xT', '3ro-R8b1nK', '3ro-V4p9kL', '3ro-X1m7xZ', '3ro-Z6w2tQ', '3ro-H9s3vP', '3ro-K2b8nR', '3ro-N4p1kW', '3ro-Q7m5xL', '3ro-T9w3tM', '3ro-W2s8vQ', '3ro-Y6b4nR', '3ro-C1p9kX', '3ro-E4m2xW', '3ro-F8w7tP', '3ro-G2s3vL', '3ro-J9b5nQ', '3ro-L1p7kM', '3ro-M4m8xZ', '3ro-P9w2tT', '3ro-R3s1vW', '3ro-V7b6nK'],
+            '4to': [
+                'MROCTOBER', 'YQUEPASOSETEQUEDOSINGASOLINAELTRUCK', 'TUTIENESTODASLASJORDANYOSOYJORDANALFRENTEDELARO',
+                '4to-D73f2Z', '4to-r5M1pW', '4to-T9s4vK', '4to-x2b8nR', '4to-Z7p3kL', '4to-H4m9xQ', '4to-K1w5tM', '4to-N6s2vP', '4to-Q3b8nT', '4to-W9p4kW', '4to-Y2m7xZ', '4to-B6w1tQ', '4to-E9s3vL', '4to-F2b7nR', '4to-G4p8kM', '4to-J1m5xW', '4to-L7w9tP', '4to-M3s2vQ', '4to-P9b4nK', '4to-R2p6kL', '4to-T8m1xZ', '4to-V3w7tQ', '4to-X9s4vM', '4to-Z2b8nP', '4to-H6p1kW', '4to-K9m5xL', '4to-N3w2tT', '4to-Q8s7vW', '4to-T1b3nR', '4to-W4p9kX', '4to-Y7m2xQ', '4to-B1w8tP', '4to-D6s3vL', '4to-F9b5nK', '4to-G2p7kM', '4to-J4m1xZ', '4to-L8w3tQ', '4to-M1s9vW', '4to-P6b2nR', '4to-R3p8kL'
+            ],
+            '5to': ['5to-E14g6W', '5to-p7N2qK', '5to-V3s9vL', '5to-y4b1nR', '5to-B8p5kM', '5to-D2m7xZ', '5to-F9w3tQ', '5to-G4s1vP', '5to-J8b6nT', '5to-L2p9kW', '5to-M7m3xL', '5to-P1w8tM', '5to-R4s2vQ', '5to-V9b7nR', '5to-X3p1kL', '5to-Z8m5xW', '5to-H2w9tP', '5to-K7s4vM', '5to-N1b3nK', '5to-Q6p8kX', '5to-T9m2xQ', '5to-W3w7tZ', '5to-Y8s1vW', '5to-C2b4nR', '5to-E7p9kL'],
+            '6to': ['6to-F25h8K', '6to-q3M9pW', '6to-W1s4vM', '6to-z7b2nR', '6to-C9p3kL', '6to-E4m8xZ', '6to-G1w7tQ', '6to-J6s3vP', '6to-L3b9nR', '6to-M8p4kW', '6to-P2m1xL', '6to-R7w3tM', '6to-V1s9vQ', '6to-X4b8nM', '6to-Z9p5kK', '6to-H3m2xW', '6to-K8w1tP', '6to-N2s7vL', '6to-Q4b3nK', '6to-T7p9kX', '6to-W1m5xQ', '6to-Y4w2tZ', '6to-B9s8vW', '6to-D3b1nR', '6to-F7p4kL']
+        };
+
+        // --- SISTEMA DE COOKIES PARA GUARDAR CLAVE ---
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                let date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "")  + expires + "; path=/; SameSite=Strict";
+        }
+
+        function getCookie(name) {
+            let nameEQ = name + "=";
+            let ca = document.cookie.split(';');
+            for(let i=0;i < ca.length;i++) {
+                let c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+        }
+
+        // Al iniciar la web, lee si hay datos recordados en las cookies
+        function verificarCookiesInicio() {
+            const cursoGuardado = getCookie("cead_curso");
+            const passGuardada = getCookie("cead_pass");
+
+            if (cursoGuardado && passGuardada) {
+                document.getElementById('cursoSelect').value = cursoGuardado;
+                document.getElementById('passwordInput').value = passGuardada;
+                document.getElementById('rememberMe').checked = true;
+            }
+            actualizarPlaceholder();
+        }
+
+        function actualizarPlaceholder() {
+            const curso = document.getElementById('cursoSelect').value;
+            if(curso === '3ro') document.getElementById('passwordInput').placeholder = "Ej: 3ro-2aB83M";
+            else if(curso === '4to') document.getElementById('passwordInput').placeholder = "Introduce tu código especial de 4to";
+            else document.getElementById('passwordInput').placeholder = `Ej: ${curso}-A83b9X`;
+        }
+
+        // --- VALIDACIÓN DE ACCESO ---
+        function validarAcceso() {
+            const cursoSeleccionado = document.getElementById('cursoSelect').value;
+            const passwordIngresada = document.getElementById('passwordInput').value.trim();
+            const checkboxRecordar = document.getElementById('rememberMe').checked;
+            
+            const listaCurso = contrasenasValidas[cursoSeleccionado];
+            const esValida = listaCurso.includes(passwordIngresada);
+
+            if (esValida) {
+                // Controlar cookies según la decisión del alumno
+                if (checkboxRecordar) {
+                    setCookie("cead_curso", cursoSeleccionado, 30); // Guarda por 30 días
+                    setCookie("cead_pass", passwordIngresada, 30);
+                } else {
+                    // Borrar cookies si desmarcan la casilla
+                    setCookie("cead_curso", "", -1);
+                    setCookie("cead_pass", "", -1);
+                }
+
+                cursoActualGlobal = cursoSeleccionado;
+
+                // Transición de interfaz
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('libraryContent').style.display = 'block';
+                document.getElementById('sessionCurso').innerText = cursoSeleccionado + " de Secundaria";
+                
+                // Mostrar contabilidad del curso
+                mostrarConteoCurso();
+            } else {
+                const errorDiv = document.getElementById('loginError');
+                errorDiv.innerText = "Contraseña incorrecta o no corresponde al curso.";
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        // --- CONTABILIDAD INDEPENDIENTE POR CURSO ---
+        function mostrarConteoCurso() {
+            // Estructura clave en memoria local: 'usos_1ro', 'usos_4to', etc.
+            let keyCurso = 'usos_' + cursoActualGlobal;
+            let usosActuales = localStorage.getItem(keyCurso) || "0";
+            document.getElementById('courseCounter').innerText = usosActuales;
+        }
+
+        function registrarUso() {
+            let keyCurso = 'usos_' + cursoActualGlobal;
+            let usosActuales = parseInt(localStorage.getItem(keyCurso)) || 0;
+            usosActuales++;
+            localStorage.setItem(keyCurso, usosActuales.toString());
+            document.getElementById('courseCounter').innerText = usosActuales;
+        }
+
+        // Arrancar revisando las cookies guardadas al cargar la página
+        verificarCookiesInicio();
+    </script>
+</body>
+</html>
